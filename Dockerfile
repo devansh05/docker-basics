@@ -22,18 +22,20 @@ RUN apt install -y nodejs
 # 3. Setting up project files
 
 # a. setting up project directory
-WORKDIR /home/app
+WORKDIR /home/app/docker-basics
 
 # b. copying project files
 COPY index.js index.js
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+RUN npm init -y
+RUN npm i express@5
+# COPY package.json package.json
+# COPY package-lock.json package-lock.json
 
 # 4. Installing project dependencies
 RUN npm install
 
 # 5. Running the project finally
-# RUN node index.js
+#  RUN node index.js
 
 # run this command in terminal
 # docker build -t my-custom-image .
