@@ -1,15 +1,35 @@
 # 1. setting up the base image for our docker file with a lighweight tag version
-FROM node:24.16-bookworm-slim
+# FIRST STAGE - base
+FROM node:24.16-bookworm-slim as base
 
+# SECOND STAGE - builder
+FROM base as builder
 # 3. Setting up project files
 # a. setting up project directory
-WORKDIR /home/app/docker-basics
+WORKDIR /home/app/docker-basics/build
+
 # b. copying project files
-COPY package.json package.json
+COPY package*.json .
+COPY tsconfig.json .
 # 4. Installing project dependencies
 RUN npm install
+
 # copying source code after npm install so it wont run over and over again if code changes
-COPY index.js index.js
+COPY index.ts index.ts
+COPY src/ src/
+
+RUN npm run build
+
+# THIRD STAGE - runner
+FROM base as runner
+
+WORKDIR /home/app/docker-basics/app
+
+COPY --from=builder /home/app/docker-basics/build/dist /home/app/docker-basics/app/dist
+COPY --from=builder /home/app/docker-basics/build/package.json /home/app/docker-basics/app/package.json
+COPY --from=builder /home/app/docker-basics/build/package-lock.json /home/app/docker-basics/app/package-lock.json
+
+RUN npm install --omit=dev
 
 # exposes port 3000 for auto-mapping and developer documentation
 EXPOSE 3000

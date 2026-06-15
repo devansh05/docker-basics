@@ -1,6 +1,6 @@
-import app from './src/app.ts';
+import app from './src/app.js';
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 app.listen(PORT, () => {
   console.log(`Server is executing perfectly on http://localhost:${PORT}`);
