@@ -1,4 +1,4 @@
-import app from './src/app.js'; // Note the .js extension for NodeNext resolution
+import app from './src/app.ts';
 
 const PORT = process.env.PORT || 3000;
 
