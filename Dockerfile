@@ -31,8 +31,20 @@ COPY --from=builder /home/app/docker-basics/build/package-lock.json /home/app/do
 
 RUN npm install --omit=dev
 
+RUN addgroup --system -gid 1001 nodejs
+
+RUN adduser --system -uid=1001 nodejs
+
+USER nodejs
+
 # exposes port 3000 for auto-mapping and developer documentation
 EXPOSE 3000
+
+# Adding environment variables to docker image
+ENV PORT=8000
+
+# docker run -it -p 3000:3000 -e PORT=3000 ts-node
+# docker run -it -p 3000:3000 -envfile=./.env ts-node # using an env file for docker image
 
 # 5. Running the project finally
 CMD ["npm", "start"]
