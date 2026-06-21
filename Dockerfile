@@ -41,7 +41,7 @@ USER nodejs
 EXPOSE 3000
 
 # Adding environment variables to docker image
-ENV PORT=8000
+ENV PORT=3000
 
 # docker run -it -p 3000:3000 -e PORT=3000 ts-node
 # docker run -it -p 3000:3000 -envfile=./.env ts-node # using an env file for docker image

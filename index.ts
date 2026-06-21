@@ -8,14 +8,16 @@ async function init() {
   try {
     console.log(`🟡 LOG - : REDIS`);
     // Redis Connection
-    const redisHost = process.env.REDIS_HOST ?? "127.0.0.1";
-    const redisPort = process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : 6379;
-    const redisUrl = process.env.REDIS_URL ?? `redis://${redisHost}:${redisPort}`;
+    const redisHost = "redis";
+    const redisPort = 6379;
+    const redisUrl =
+      process.env.REDIS_URL ?? `redis://${redisHost}:${redisPort}`;
 
-    console.log(`Connecting Redis at ${redisUrl}...`);
     const redis = new Redis(redisUrl, {
       lazyConnect: true,
     });
+
+    console.log(`Connecting Redis at ${redisUrl}...`);
     redis.on("error", (error) => console.error("Redis error:", error));
     await redis.connect();
     console.log(`Redis Connection Success...`);
@@ -24,11 +26,10 @@ async function init() {
     console.log(`Connecting Postgres...`);
 
     const pool = new Pool({
-      user: process.env.PG_USER ?? "postgres",
-      host: process.env.PG_HOST ?? "127.0.0.1",
-      database: process.env.PG_DATABASE ?? "postgres",
-      password: process.env.PG_PASSWORD ?? "postgres",
-      port: Number(process.env.PG_PORT ?? 5431),
+      user: "postgres",
+      host: "db",
+      database: "postgres",
+      password: "postgres",
     });
 
     await pool.connect();
@@ -36,7 +37,7 @@ async function init() {
     console.log(`Postgres Connection Success...`);
 
     // Http Server Stuff
-    const PORT = process.env.PORT ? +process.env.PORT : 3000;
+    const PORT = 3000;
     const server = http.createServer(app);
     server.listen(PORT, () =>
       console.log(`Http server is listening on PORT ${PORT}`),
@@ -46,4 +47,4 @@ async function init() {
   }
 }
 
-init()
+init();
